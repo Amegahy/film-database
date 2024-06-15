@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', function () {
-    $username = Request::input('username');
+session_start(); // Init a session to store user data
 
-    return redirect('/'); // Redirect to dashboard on success
+Route::post('/login', function () {
+    // This should be checked alongside database to ensure details are valid
+    $_SESSION["usr"] = Request::input('username'); 
+
+    return redirect('/'); // Redirect to homepage on success
 
 })->name('login.submit');

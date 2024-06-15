@@ -21,9 +21,13 @@
     </div>
     <div class="w-full lg:w-auto lg:flex items-center" @click.outside="showMobileNav = false" x-show="showMobileNav">
         {{ nav }}
-            {{ if url == "/sign-in" }}
-                <button href="{{ url }}" class="btn block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
-                    {{ title }}
+            {{ if url == "/login" }}
+                <a href="{{ url }}" class="btn block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
+                    {{ if logged_in }}
+                        Logout
+                    {{ else }}
+                        Login
+                    {{ /if }}
                 </button>
             {{ else }}
                 <a href="{{ url }}" class="block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
