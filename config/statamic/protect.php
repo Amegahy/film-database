@@ -35,12 +35,6 @@ return [
             'allowed' => ['127.0.0.1'],
         ],
 
-        'logged_in' => [
-            'driver' => 'auth',
-            'login_url' => '/login',
-            'append_redirect' => true,
-        ],
-
         'password' => [
             'driver' => 'password',
             'allowed' => ['secret'],
