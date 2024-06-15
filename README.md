@@ -13,6 +13,11 @@ POST HTML form with the web.php routes file handing the call. This function just
 - Next, will need to combine this check with the logged in check from the previous stage. This way the page will only appear if the user is logged in. 
     - Looks like there is no native AND operator for the if statements so will have to do nested ifs
 
+### 3. Gallery
+- Firstly need to setup API keys via https://www.themoviedb.org/settings/api
+- Have the API keys, now need to get JSON data via PHP get call. However, could not get the call to integrate with the antler variables. For some reason the data was no being pulled through to the HTML file. Due to time restraints, I ahve added the call into the inline JS and output the list of moives that way. Not really happy with this, but it does function and this would be an area I'd like to redo. 
+- Focused just on functionality in this branch as style changes can be done closer to the end of the project. 
+
 ## Given more time
 
 Below I will document the points I would have liked to improve upon given more time and resources:
@@ -23,3 +28,6 @@ Below I will document the points I would have liked to improve upon given more t
 
 ### 2. Members Only
 - Would like to add a checker into the actual view for the members only pages which would do the same check as the nav loop does. Thsi way, users cant get around the check by just typeing in the url. This would probably be done with the same checker added to the nav file or the routes file, that way it will be on every page.
+
+### 3. Gallery
+- Would like to go back and remove the JS call to the API and get the call working via PHP. However, due to lack of knoweldge on Antler, was unsure on how why the data wasn't being pulled through correctly. So more practice with pulling in data and forming loops in Anterl would be needed. 
