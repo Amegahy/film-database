@@ -9,6 +9,7 @@ POST HTML form with the web.php routes file handing the call. This function just
 - Next is to handle the navigation bar changes when the user is logged in. Currently the "Login" nav item still says "Login" when it should read "Logout" if the user is logged in and visa versa. Thought that these files would be able to handle inline PHP, but requires a custom tag in order to read the session varibale and then pass that to the frontend. 
 
 
+
 ## Given more time
 
 Below I will document the points I would have liked to improve upon given more time and resources:
