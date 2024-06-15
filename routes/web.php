@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 session_start(); // Init a session to store user data
-$_SESSION["logged"]; // Init the logged in variable
+
+if (!isset($_SESSION['logged'])) {
+    $_SESSION['logged'] = false; // Initialize with a default value
+}
 
 Route::post('/login', function () {
     // This should be checked alongside database to ensure details are valid
