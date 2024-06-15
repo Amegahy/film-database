@@ -4,5 +4,7 @@ blueprint: page
 title: Gallery
 template: page
 updated_by: 5b5183f3-7157-424b-9942-d3248577a4d8
-updated_at: 1718451190
+updated_at: 1718470227
+members_only: true
+parent: home
 ---
