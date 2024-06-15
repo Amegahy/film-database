@@ -1,0 +1,14 @@
+<div class="max-w-5xl mx-auto relative mt-16 content">
+    <form method="POST">
+        {{ csrf_field }}
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+</div>

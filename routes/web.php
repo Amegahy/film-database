@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route::statamic('example', 'example-view', [
-//    'title' => 'Example'
-// ]);
+Route::post('/login', function () {
+    $username = Request::input('username');
+
+    return redirect('/'); // Redirect to dashboard on success
+
+})->name('login.submit');
