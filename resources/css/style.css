@@ -37,10 +37,6 @@ h1 {
         @apply text-3xl leading-tight;
     }
 
-    img {
-        @apply my-12;
-    }
-
     a {
         @apply text-teal font-medium underline;
         &:hover {

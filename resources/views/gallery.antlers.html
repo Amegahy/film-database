@@ -1,0 +1,54 @@
+<div class="max-w-5xl mx-auto relative mt-16 content"></div>
+
+<script>
+    const apiKey = '9bd4cf4a380133fab5c5471c64c5a71f';
+    const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
+
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('File not found');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Log the API response data
+            console.log(data);
+
+            // Process the movies and output into the div
+            const moviesContainer = document.querySelector('.content');
+            moviesContainer.innerHTML = ''; 
+
+            // Loop through the results array and create HTML for each movie
+            data.results.forEach(movie => {
+                const movieDiv = document.createElement('div');
+                movieDiv.classList.add('movie-card');
+
+                const movieMetaDiv = document.createElement('div');
+                movieMetaDiv.classList.add('movie-meta');
+
+                const title = document.createElement('h2');
+                title.textContent = movie.title;
+                
+                const rating = document.createElement('h3');
+                rating.textContent = movie.vote_average;
+
+                const img = document.createElement('img');
+                img.src = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
+
+                const overview = document.createElement('p');
+                overview.textContent = movie.overview;
+
+                movieDiv.appendChild(img);
+                movieMetaDiv.appendChild(title);
+                movieMetaDiv.appendChild(rating);
+                movieMetaDiv.appendChild(overview);
+                movieDiv.appendChild(movieMetaDiv);
+                
+                moviesContainer.appendChild(movieDiv);
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+</script>
