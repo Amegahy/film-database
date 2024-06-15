@@ -10,6 +10,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^11",
         "laravel/tinker": "^2.9",
         "statamic/cms": "^5.0"
