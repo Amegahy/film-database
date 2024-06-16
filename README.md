@@ -25,6 +25,8 @@ POST HTML form with the web.php routes file handing the call. This function just
 
 ### 4.2 Filters
 - With the filters, it is important to first check wheat actions the API can handle and build the filters around those. Rather than building filters and trying to manipulate the data coming in to fit our needs. 
+- Have to rework the main API in order to make it return a call. Due to the process being Async, I was not getting the data back to populate the genres table correctly. 
+- Had a weird issue with the checkboxes not being checked when they are clicked. I think this is because that whole section is being populated by jQuery. Fixed this with an onclick method toggling the attribute. 
 
 ## Given more time
 

@@ -17,20 +17,26 @@
     <label for="lang">English Movies Only</label>
     <input type="checkbox" id="lang" name="lang" value="en" />
 
+    <h3>Select genres:</h3>
+    <div id="genreContainer"></div>
+
     <button id="filterButton" class="filter-button">Filter</button>
 </div>
 
 <div class="max-w-5xl mx-auto relative mt-16 content"></div>
 
 <script>
-            var apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=9bd4cf4a380133fab5c5471c64c5a71f`;
+    $(document).ready(function() {
+        const apiKey = "9bd4cf4a380133fab5c5471c64c5a71f";
+        var apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
 
-            // Make AJAX request using jQuery
-            apiCall(apiUrl);
+        // Make AJAX request using jQuery
+        apiCall(apiUrl);
+        populateGenres();
 
             // Specific search bar
             $('#searchButton').click(function() {
-                apiUrl = "https://api.themoviedb.org/3/search/movie?api_key=9bd4cf4a380133fab5c5471c64c5a71f";
+                apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}`;
 
                 const searchTerm = $('#searchInput').val().trim();
                 
@@ -39,33 +45,86 @@
             });
 
             // Main API call to get the data
-            function apiCall(apiUrl) {
-                console.log(apiUrl);
+            function apiCall(apiUrl, callback = null) {
                 $.ajax({
                     url: apiUrl,
                     method: 'GET',
                     success: function(data) {
-                        console.log(data); // Log the API response data
-                        populateMovies(data); // Call function to populate movies on the page
+                        if (typeof callback === 'function') {
+                            callback(data); // Return the data
+                        } else {
+                            populateMovies(data); // Call function to populate movies on the page
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error('There was a problem with the fetch operation:', error);
+                        if (typeof callback === 'function') {
+                            callback(null, error); // Return the error
+                        }
                     }
                 });
             }
 
             // Filter movies out using filters values
             $('#filterButton').click(function() {
-                // Automatically pull in the sort by data
-                var filteredApiCall = apiUrl + `&sort_by=${$('#sortBy').val()}`;
+                var filteredApiCall = apiUrl + `&sort_by=${$('#sortBy').val()}`;// Automatically pull in the sort by data
+                var selectedGenres = [];
+
+                // List of checked genres
+                var checkedGenres = $('#genreContainer').find('input').each(function() {
+                    if($(this).prop('checked')) {
+                        selectedGenres.push($(this).attr('id'));
+                    }
+                });
+
+                // Add the selected genres on, if any
+                if (selectedGenres.length > 0) {
+                    filteredApiCall += `&with_genres=${selectedGenres.join(',')}`;
+                }
 
                 // Check if the language checkbox has been checked
                 if ($('#lang').prop('checked')) {
-                    filteredApiCall += `&with_original_language=${$('#lang').val()}`;
+                    filteredApiCall += `&language=${$('#lang').val()}`;
                 }
 
                 apiCall(filteredApiCall);
             });
+
+            // Populate the list of genres with the API call
+            function populateGenres() {
+                var genresUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
+
+                apiCall(genresUrl, function(data, error) {
+                    if (error) {
+                        console.error('Error getting genres');
+                    } else {
+                        data.genres.forEach(genre => {
+                            // Create the checbox element
+                            var checkbox = $('<input>').attr({
+                                type: 'checkbox',
+                                id: genre.id,
+                                name: 'genres',
+                                value: genre.name
+                            });
+
+                            // Checkbox label
+                            var label = $('<label>').attr('for', genre.id).text(genre.name);
+
+                            // Set the checked attribute to those which have been clicked
+                            checkbox.on('click', function() {
+                                if ($(this).prop('checked')) {
+                                    $(this).attr('checked', 'checked');
+                                } else {
+                                    $(this).removeAttr('checked');
+                                }
+                            });
+
+                            // Append the newly created checkbox to the list
+                            $('#genreContainer').append(checkbox).append(label).append('<br>');
+                        });
+                    }
+                });
+            }
 
             // Function to populate movies on the page
             function populateMovies(data) {
