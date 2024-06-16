@@ -1,14 +1,39 @@
 <div class="max-w-5xl mx-auto relative mt-16 content">
-    <form method="POST">
+    <form class="login-form mx-auto" method="POST">
+
         {{ csrf_field }}
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+
+        <div class="mb-16 flex justify-between">
+            <label for="username">Username: </label>
+            <input type="text" id="username" class="w-100 py-1 px-3" name="username" required>
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+
+        <div class="mb-16 flex justify-between">
+            <label for="password">Password: </label>
+            <input type="password" id="password" class="w-100 py-1 px-3" name="password" required>
         </div>
-        <button type="submit">Login</button>
+        
+        <button type="submit" class="w-100 btn">Login</button>
     </form>
 </div>
+
+<!-- Styles specific to login page -->
+<style>
+    .login-form {
+        max-width: 600px;
+        padding: 2rem;
+        border: 2px solid #001048;
+        border-radius: 20px;
+        background-color: #e7f5ff;
+    }
+
+    .login-form > div {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .login-form > div input {
+        max-width: 400px;
+    }
+</style>

@@ -1,51 +1,86 @@
-<nav class="flex items-center justify-between lg:justify-start flex-wrap py-10 max-w-5xl mx-auto">
-    {{ collection:pages url:is="/" }}
-        <div class="text-md antialiased font-medium">
-            <a href="{{ url }}" class="block  mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">{{ title }}</a>
+<nav>
+    <div class="flex items-center justify-between lg:justify-start flex-wrap py-10 max-w-5xl mx-auto">
+        {{ collection:pages url:is="/" }}
+            <div class="text-md antialiased font-medium">
+                <a href="{{ url }}" class="block  mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">{{ title }}</a>
+            </div>
+        {{ /collection:pages }}
+        <div class="block lg:hidden">
+            <button class="flex items-center px-3 text-gray-800" x-bind:class="{'hidden': showMobileNav}" @click="showMobileNav = true">
+                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <title>Open Menu</title>
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                </svg>
+            </button>
+            <button class="items-center px-3 text-gray-800" x-bind:class="{'flex': showMobileNav, 'hidden': ! showMobileNav}" @click="showMobileNav = false" x-cloak>
+                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <title>Close Menu</title>
+                    <path
+                        d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
+                </svg>
+            </button>
         </div>
-    {{ /collection:pages }}
-    <div class="block lg:hidden">
-        <button class="flex items-center px-3 text-gray-800" x-bind:class="{'hidden': showMobileNav}" @click="showMobileNav = true">
-            <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <title>Open Menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
-        </button>
-        <button class="items-center px-3 text-gray-800" x-bind:class="{'flex': showMobileNav, 'hidden': ! showMobileNav}" @click="showMobileNav = false" x-cloak>
-            <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <title>Close Menu</title>
-                <path
-                    d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
-            </svg>
-        </button>
-    </div>
-    <div class="w-full lg:w-auto lg:flex items-center" @click.outside="showMobileNav = false" x-show="showMobileNav">
-        {{ nav }}
-            {{ if url == "/login" }}
-                {{ if {{ logged }} }}
-                    <a href="{{ route:logout.submit }}" class="btn block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
-                        Logout
-                    </a>
+        <div class="w-full lg:w-auto lg:flex items-center" @click.outside="showMobileNav = false" x-show="showMobileNav">
+            {{ nav }}
+                {{ if url == "/login" }}
+                    {{ if {{ logged }} }}
+                        <a href="{{ route:logout.submit }}" class="btn block mt-4 lg:inline-block lg:mt-0 mr-12">
+                            Logout
+                        </a>
+                    {{ else }}
+                        <a href="{{ url }}" class="btn block mt-4 lg:inline-block lg:mt-0 mr-12">
+                            Login
+                        </a>
+                    {{ /if }}
                 {{ else }}
-                    <a href="{{ url }}" class="btn block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
-                        Login
+                {{ if members_only }}
+                    {{ if {{ logged }} }}
+                    <a href="{{ url }}" class="block {{ is_current || is_parent ?= 'font-bold text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
+                        {{ title }}
+                    </a>
+                    {{ /if }}
+                {{ /if }}
+                {{ if !members_only }}
+                    <a href="{{ url }}" class="block {{ is_current || is_parent ?= 'font-bold text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
+                        {{ title }}
                     </a>
                 {{ /if }}
-            {{ else }}
-            {{ if members_only }}
-                {{ if {{ logged }} }}
-                <a href="{{ url }}" class="block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
-                    {{ title }}
-                </a>
-                {{ /if }}
-            {{ /if }}
-            {{ if !members_only }}
-                <a href="{{ url }}" class="block {{ is_current || is_parent ?= 'font-medium text-gray-800' }} mt-4 lg:inline-block text-gray-600 hover:text-gray-800 lg:mt-0 mr-12">
-                    {{ title }}
-                </a>
-            {{ /if }}
 
-            {{ /if }}
-        {{ /nav }}
+                {{ /if }}
+            {{ /nav }}
+        </div>
     </div>
 </nav>
+
+<!-- Global Styles -->
+<style>
+    .w-100 {
+        width: 100% !important;
+    }
+
+    .btn {
+        background-color: #001048;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border: 2px solid #001048;
+        width: fit-content;
+    }
+
+    .btn:hover {
+        background-color: #ffffff;
+        color: #001048;
+    }
+
+    /* Media queries for desktop */
+    @media (min-width: 1024px) {
+        nav a.btn {
+            position: absolute;
+            right: 0;
+        }
+
+        nav {
+            border-bottom: 3px solid #001048;
+            margin-bottom: 1rem;
+        }
+    }
+</style>

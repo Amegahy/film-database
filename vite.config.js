@@ -6,6 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/site.css',
+                'resources/css/gallery.css',
                 'resources/js/site.js',
             ],
             refresh: true,

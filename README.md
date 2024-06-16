@@ -29,6 +29,13 @@ POST HTML form with the web.php routes file handing the call. This function just
 - Had a weird issue with the checkboxes not being checked when they are clicked. I think this is because that whole section is being populated by jQuery. Fixed this with an onclick method toggling the attribute.
 - Checked each of the checkboxes and added the ids of the checked ones to an array. This was then used in the API url to grab the movies with the relevant genres.   
 
+### 5 Clean up
+- Rearrange the gallery page in order for it to resemble the design. Currently the functionalit is complete, but CSS and structural changes are required. CSS will need to go into the gallery view as I am unable to use vite to pull in a seperate file. I have been able to use some of the exisitng classes from Tailwind in order to cut down on custom CSS. 
+    - Had to use a lot of CSS in the file to override some core styles. For some reason no changes made to site.css were taking effect, which is why they are all in either the gallery view or the nav view
+- Remove all console.logs which were sued for testing and are not erro catching related
+- Review comments left on fucntions and flesh them out where required for better readabilty. 
+- Go through each of the pages in the CMS and add dummy content to flesh them out a bit more rather than just blank pages
+
 ## Given more time
 
 Below I will document the points I would have liked to improve upon given more time and resources:
@@ -51,3 +58,7 @@ Below I will document the points I would have liked to improve upon given more t
 - Add more filters in, such as a date picker. Could do this with a standard date picker and then change the format into something which can be used with the API. Would probably use the 'year' attribute in the API to grab that. 
 - Would like to combine the functionality of the serach bar and the filters so that the user can search through filtered movies. Would need to add a check to both the filter and search buttons to check the others value and add it to the API url it passes through. 
 - Would be good to add a "Clear" button to the filters to remove all filters. This would just be done by looping through each of the elemtns, in the same way it is already done to check them, and setting checked to unchecked. Then run the function to repopulate the page. 
+
+### 5 Clean up
+- I'd like to move both the JS and CSS in the gallery view into their own seperate files and pull them in via vite. However, due to lack of experience with the platofrm, I am unsure on how to do this. 
+- Would have liked to have used premade classes more to structure the page, mainly in terms of margins and padding. 

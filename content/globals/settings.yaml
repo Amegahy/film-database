@@ -4,14 +4,14 @@ data:
   site_name: 'Film DB'
   social:
     -
-      name: Twitter
-      url: '#'
-      icon: site/social-icons/twitter.svg
+      name: LinkedIn
+      url: 'https://www.linkedin.com/in/alexmegahy/'
+      icon: site/social-icons/linkedin.svg
     -
       name: Github
-      url: '#'
+      url: 'https://github.com/Amegahy'
       icon: site/social-icons/github.svg
     -
       name: Email
-      url: '#'
+      url: 'mailto:alex.megahy@hotmail.co.uk'
       icon: site/social-icons/email.svg
