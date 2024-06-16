@@ -1,8 +1,8 @@
 ---
-title: Home
 id: home
-template: home
 blueprint: home
-subtitle: I see pride. I see power.
+title: Home
+template: page
+updated_by: 5b5183f3-7157-424b-9942-d3248577a4d8
+updated_at: 1718544852
 ---
-I see a bad-ass mother who don't take no crap off of nobody.
