@@ -2,10 +2,27 @@
     <input type="text" id="searchInput" class="search-input" placeholder="Enter movie title">
     <button id="searchButton" class="search-button">Search</button>
 </div>
+
+<div class="filters-container">
+    <label for="sortBy">Sort By:</label>
+    <select id="sortBy" name="sortBy">
+        <option value="popularity.desc" selected>Popularity Descending</option>
+        <option value="popularity.asc">Popularity Ascending</option>
+        <option value="vote_average.desc">Average Rating Descending</option>
+        <option value="vote_average.asc">Average Rating Ascending</option>
+        <option value="vote_count.desc">Rating Count Descending</option>
+        <option value="vote_count.asc">Rating Count Ascending</option>
+    </select>
+
+    <label for="lang">English Movies Only</label>
+    <input type="checkbox" id="lang" name="lang" value="en" />
+
+    <button id="filterButton" class="filter-button">Filter</button>
+</div>
+
 <div class="max-w-5xl mx-auto relative mt-16 content"></div>
 
 <script>
-    $(document).ready(function() {
             var apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=9bd4cf4a380133fab5c5471c64c5a71f`;
 
             // Make AJAX request using jQuery
@@ -36,6 +53,19 @@
                     }
                 });
             }
+
+            // Filter movies out using filters values
+            $('#filterButton').click(function() {
+                // Automatically pull in the sort by data
+                var filteredApiCall = apiUrl + `&sort_by=${$('#sortBy').val()}`;
+
+                // Check if the language checkbox has been checked
+                if ($('#lang').prop('checked')) {
+                    filteredApiCall += `&with_original_language=${$('#lang').val()}`;
+                }
+
+                apiCall(filteredApiCall);
+            });
 
             // Function to populate movies on the page
             function populateMovies(data) {
