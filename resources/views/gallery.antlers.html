@@ -1,54 +1,152 @@
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Enter movie title">
+    <button id="searchButton" class="search-button">Search</button>
+</div>
+
+<div class="filters-container">
+    <label for="sortBy">Sort By:</label>
+    <select id="sortBy" name="sortBy">
+        <option value="popularity.desc" selected>Popularity Descending</option>
+        <option value="popularity.asc">Popularity Ascending</option>
+        <option value="vote_average.desc">Average Rating Descending</option>
+        <option value="vote_average.asc">Average Rating Ascending</option>
+        <option value="vote_count.desc">Rating Count Descending</option>
+        <option value="vote_count.asc">Rating Count Ascending</option>
+    </select>
+
+    <label for="lang">English Movies Only</label>
+    <input type="checkbox" id="lang" name="lang" value="en" />
+
+    <h3>Select genres:</h3>
+    <div id="genreContainer"></div>
+
+    <button id="filterButton" class="filter-button">Filter</button>
+</div>
+
 <div class="max-w-5xl mx-auto relative mt-16 content"></div>
 
 <script>
-    const apiKey = '9bd4cf4a380133fab5c5471c64c5a71f';
-    const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
+    $(document).ready(function() {
+        const apiKey = "9bd4cf4a380133fab5c5471c64c5a71f";
+        var apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
 
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('File not found');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Log the API response data
-            console.log(data);
+        // Make AJAX request using jQuery
+        apiCall(apiUrl);
+        populateGenres();
 
-            // Process the movies and output into the div
-            const moviesContainer = document.querySelector('.content');
-            moviesContainer.innerHTML = ''; 
+            // Specific search bar
+            $('#searchButton').click(function() {
+                apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}`;
 
-            // Loop through the results array and create HTML for each movie
-            data.results.forEach(movie => {
-                const movieDiv = document.createElement('div');
-                movieDiv.classList.add('movie-card');
-
-                const movieMetaDiv = document.createElement('div');
-                movieMetaDiv.classList.add('movie-meta');
-
-                const title = document.createElement('h2');
-                title.textContent = movie.title;
+                const searchTerm = $('#searchInput').val().trim();
                 
-                const rating = document.createElement('h3');
-                rating.textContent = movie.vote_average;
-
-                const img = document.createElement('img');
-                img.src = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
-
-                const overview = document.createElement('p');
-                overview.textContent = movie.overview;
-
-                movieDiv.appendChild(img);
-                movieMetaDiv.appendChild(title);
-                movieMetaDiv.appendChild(rating);
-                movieMetaDiv.appendChild(overview);
-                movieDiv.appendChild(movieMetaDiv);
-                
-                moviesContainer.appendChild(movieDiv);
+                $('#searchInput').val('');// Empty the search bar
+                apiCall(apiUrl + `&query=${searchTerm}`);
             });
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+
+            // Main API call to get the data
+            function apiCall(apiUrl, callback = null) {
+                $.ajax({
+                    url: apiUrl,
+                    method: 'GET',
+                    success: function(data) {
+                        if (typeof callback === 'function') {
+                            callback(data); // Return the data
+                        } else {
+                            populateMovies(data); // Call function to populate movies on the page
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('There was a problem with the fetch operation:', error);
+                        if (typeof callback === 'function') {
+                            callback(null, error); // Return the error
+                        }
+                    }
+                });
+            }
+
+            // Filter movies out using filters values
+            $('#filterButton').click(function() {
+                var filteredApiCall = apiUrl + `&sort_by=${$('#sortBy').val()}`;// Automatically pull in the sort by data
+                var selectedGenres = [];
+
+                // List of checked genres
+                var checkedGenres = $('#genreContainer').find('input').each(function() {
+                    if($(this).prop('checked')) {
+                        selectedGenres.push($(this).attr('id'));
+                    }
+                });
+
+                // Add the selected genres on, if any
+                if (selectedGenres.length > 0) {
+                    filteredApiCall += `&with_genres=${selectedGenres.join(',')}`;
+                }
+
+                // Check if the language checkbox has been checked
+                if ($('#lang').prop('checked')) {
+                    filteredApiCall += `&language=${$('#lang').val()}`;
+                }
+
+                apiCall(filteredApiCall);
+            });
+
+            // Populate the list of genres with the API call
+            function populateGenres() {
+                var genresUrl = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
+
+                apiCall(genresUrl, function(data, error) {
+                    if (error) {
+                        console.error('Error getting genres');
+                    } else {
+                        data.genres.forEach(genre => {
+                            // Create the checbox element
+                            var checkbox = $('<input>').attr({
+                                type: 'checkbox',
+                                id: genre.id,
+                                name: 'genres',
+                                value: genre.name
+                            });
+
+                            // Checkbox label
+                            var label = $('<label>').attr('for', genre.id).text(genre.name);
+
+                            // Set the checked attribute to those which have been clicked
+                            checkbox.on('click', function() {
+                                if ($(this).prop('checked')) {
+                                    $(this).attr('checked', 'checked');
+                                } else {
+                                    $(this).removeAttr('checked');
+                                }
+                            });
+
+                            // Append the newly created checkbox to the list
+                            $('#genreContainer').append(checkbox).append(label).append('<br>');
+                        });
+                    }
+                });
+            }
+
+            // Function to populate movies on the page
+            function populateMovies(data) {
+                const moviesContainer = $('.content');
+                moviesContainer.empty();// Clear the space for new movies
+
+                // Loop through results and create HTML for each movie
+                $.each(data.results, function(index, movie) {
+                    const movieDiv = $('<div>').addClass('movie-card');
+
+                    const movieMetaDiv = $('<div>').addClass('movie-meta');
+
+                    const title = $('<h2>').text(movie.title);
+                    const rating = $('<h3>').text(movie.vote_average);
+                    const img = $('<img>').attr('src', "https://image.tmdb.org/t/p/w500" + movie.poster_path);
+                    const overview = $('<p>').text(movie.overview);
+
+                    movieMetaDiv.append(title, rating, overview);
+                    movieDiv.append(img, movieMetaDiv);
+
+                    moviesContainer.append(movieDiv);
+                });
+            }
         });
 </script>

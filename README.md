@@ -18,6 +18,17 @@ POST HTML form with the web.php routes file handing the call. This function just
 - Have the API keys, now need to get JSON data via PHP get call. However, could not get the call to integrate with the antler variables. For some reason the data was no being pulled through to the HTML file. Due to time restraints, I ahve added the call into the inline JS and output the list of moives that way. Not really happy with this, but it does function and this would be an area I'd like to redo. 
 - Focused just on functionality in this branch as style changes can be done closer to the end of the project. 
 
+### 4.1 Search
+- Initial thoughts were to redo the JS and use AJAX in order to accomedate a live search and filter. However, realised it could be pretty annoying and resource intensive if we were to contantly keep updating the page each time they selected a filter or added some text in the search bar. Therefore, will just use vanilla JS and adapt the current js functionality. 
+- Decided to reorganise the vanilla JS into jQuery as it is easier to work with, espeically when calling APIs and referencing HTML elements. 
+- Moved the main loop for populating the movies into its own function. One, so it can be resued when it comes to do the search and filetering. Secondly, to segement it out of the main block and make it erasier to read. Also did the same for the API call so that it too can be reused. 
+
+### 4.2 Filters
+- With the filters, it is important to first check wheat actions the API can handle and build the filters around those. Rather than building filters and trying to manipulate the data coming in to fit our needs. 
+- Have to rework the main API in order to make it return a call. Due to the process being Async, I was not getting the data back to populate the genres table correctly. 
+- Had a weird issue with the checkboxes not being checked when they are clicked. I think this is because that whole section is being populated by jQuery. Fixed this with an onclick method toggling the attribute.
+- Checked each of the checkboxes and added the ids of the checked ones to an array. This was then used in the API url to grab the movies with the relevant genres.   
+
 ## Given more time
 
 Below I will document the points I would have liked to improve upon given more time and resources:
@@ -30,4 +41,13 @@ Below I will document the points I would have liked to improve upon given more t
 - Would like to add a checker into the actual view for the members only pages which would do the same check as the nav loop does. Thsi way, users cant get around the check by just typeing in the url. This would probably be done with the same checker added to the nav file or the routes file, that way it will be on every page.
 
 ### 3. Gallery
-- Would like to go back and remove the JS call to the API and get the call working via PHP. However, due to lack of knoweldge on Antler, was unsure on how why the data wasn't being pulled through correctly. So more practice with pulling in data and forming loops in Anterl would be needed. 
+- Would like to go back and remove the JS call to the API and get the call working via PHP. However, due to lack of knoweldge on Antler, was unsure on how why the data wasn't being pulled through correctly. So more practice with pulling in data and forming loops in Anterl would be needed.
+- Pagination functionality, as currently only the first page loads in. this would be done by taking the functionality in JS and adding it into a function. This function would then be called when the page loads to populate it, passing in a parameter of "page 1". Then again when the user clicks next page, which would increment the page index count. Then again if they go back a page, decreasing the count. Each time calling the function to repopulate the page. 
+
+### 4.1 Search
+- This ties into the previous stages improvements of moving the api call over to php and get the loop working that way. 
+
+### 4.2 Filters
+- Add more filters in, such as a date picker. Could do this with a standard date picker and then change the format into something which can be used with the API. Would probably use the 'year' attribute in the API to grab that. 
+- Would like to combine the functionality of the serach bar and the filters so that the user can search through filtered movies. Would need to add a check to both the filter and search buttons to check the others value and add it to the API url it passes through. 
+- Would be good to add a "Clear" button to the filters to remove all filters. This would just be done by looping through each of the elemtns, in the same way it is already done to check them, and setting checked to unchecked. Then run the function to repopulate the page. 
