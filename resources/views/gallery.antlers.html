@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto relative mt-16 gallery-content flex">
+<div class="max-w-5xl mx-auto relative lg:mt-16 gallery-content flex">
     <div class="sidebar-right py-1 px-3">
         <div class="search-container section-spacer flex justify-between">
             <input type="text" id="searchInput" class="search-input w-100 py-1 px-3" placeholder="Enter movie title">
@@ -40,41 +40,23 @@
     }
 
     .gallery-content {
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: reverse;
-        -ms-flex-direction: row-reverse;
-        flex-direction: row-reverse;
-    }
-
-    .movies-container {
-        width: 60%;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
     }
 
     .w-100 {
         width: 100%;
     }
 
-    .btn {
-        background-color: #001048;
-        color: #ffffff;
-        padding: 0.5rem 1rem;
-        border: 2px solid #001048;
-    }
-
-    .btn:hover {
-        background-color: #ffffff;
-        color: #001048;
-    }
-
     .sidebar-right {
-        width: 40%;
         border: 2px solid #001048;
         border-radius: 20px;
         background-color: #e7f5ff;
         height: 100%;
-        position: sticky;
-        top: 20px;
     }
+
 
     .genre-checkbox {
         margin-right: 1rem;
@@ -86,8 +68,78 @@
     }
 
     h3, 
+    b,
     p {
         font-feature-settings: normal;
+    }
+
+    /* Media queries for mobile */
+    @media (max-width: 599px) {
+        .checkbox-container {
+            width: 50%;
+        }
+
+        .movie-card {
+            flex-direction: column;
+        }
+
+        .movie-card img {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .movie-meta {
+            padding-top: 1rem;
+        }
+    }
+
+    /* Media queries for tablet */
+    @media (min-width: 600px) and (max-width: 1023px) {
+        #genreContainer {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
+        }
+
+        .checkbox-container {
+            width: 25%;
+        }
+    }
+
+    /* Media queries for all but desktop */
+    @media (max-width: 1023px) {
+        .sidebar-right {
+            margin-bottom: 1rem;
+        }
+    }
+
+    /* Media queries for desktop */
+    @media (min-width: 1024px) {
+        .gallery-content {
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: reverse;
+            -ms-flex-direction: row-reverse;
+            flex-direction: row-reverse;
+        }
+
+        .sidebar-right {
+            width: 40%;
+            position: sticky;
+            top: 20px;
+        }
+
+        .movies-container {
+            width: 60%;
+        }
     }
 </style>
 
@@ -165,6 +217,8 @@
                         console.error('Error getting genres');
                     } else {
                         data.genres.forEach(genre => {
+                            var checkboxContainer = $('<div>').attr('class', 'checkbox-container');
+
                             // Create the checbox element
                             var checkbox = $('<input>').attr({
                                 type: 'checkbox',
@@ -185,8 +239,10 @@
                                 }
                             });
 
+                            checkboxContainer.append(checkbox).append(label);
+
                             // Append the newly created checkbox to the list
-                            $('#genreContainer').append(checkbox).append(label).append('<br>');
+                            $('#genreContainer').append(checkboxContainer);
                         });
                     }
                 });
@@ -199,10 +255,10 @@
 
                 // Loop through results and create HTML for each movie
                 $.each(data.results, function(index, movie) {
-                    const movieDiv = $('<div>').addClass('movie-card flex justify-between mb-2');
+                    const movieDiv = $('<div>').addClass('movie-card flex justify-between mb-4');
                     const movieMetaDiv = $('<div>').addClass('movie-meta px-3');
                     const title = $('<h3>').text(movie.title);
-                    const rating = $('<p>').text(movie.vote_average.toFixed(1));
+                    const rating = $('<b>').text("(" + movie.vote_average.toFixed(1) + ")");
                     const img = $('<img>').attr('src', "https://image.tmdb.org/t/p/w200" + movie.poster_path);
                     const overview = $('<p>').text(movie.overview);
 

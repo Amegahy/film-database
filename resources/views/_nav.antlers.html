@@ -23,11 +23,11 @@
         {{ nav }}
             {{ if url == "/login" }}
                 {{ if {{ logged }} }}
-                    <a href="{{ route:logout.submit }}" class="btn block  mt-4 lg:inline-block lg:mt-0 mr-12">
+                    <a href="{{ route:logout.submit }}" class="btn block mt-4 lg:inline-block lg:mt-0 mr-12">
                         Logout
                     </a>
                 {{ else }}
-                    <a href="{{ url }}" class="btn block  mt-4 lg:inline-block lg:mt-0 mr-12">
+                    <a href="{{ url }}" class="btn block mt-4 lg:inline-block lg:mt-0 mr-12">
                         Login
                     </a>
                 {{ /if }}
@@ -49,3 +49,23 @@
         {{ /nav }}
     </div>
 </nav>
+
+<!-- Global Styles -->
+<style>
+    .btn {
+        background-color: #001048;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border: 2px solid #001048;
+    }
+
+    .btn:hover {
+        background-color: #ffffff;
+        color: #001048;
+    }
+
+    nav a.btn {
+        position: absolute;
+        right: 0;
+    }
+</style>

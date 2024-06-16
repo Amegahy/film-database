@@ -61,3 +61,4 @@ Below I will document the points I would have liked to improve upon given more t
 
 ### 5 Clean up
 - I'd like to move both the JS and CSS in the gallery view into their own seperate files and pull them in via vite. However, due to lack of experience with the platofrm, I am unsure on how to do this. 
+- Would have liked to have used premade classes more to structure the page, mainly in terms of margins and padding. 
