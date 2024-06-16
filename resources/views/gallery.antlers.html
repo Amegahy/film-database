@@ -1,29 +1,95 @@
-<div class="search-container">
-    <input type="text" id="searchInput" class="search-input" placeholder="Enter movie title">
-    <button id="searchButton" class="search-button">Search</button>
+<div class="max-w-5xl mx-auto relative mt-16 gallery-content flex">
+    <div class="sidebar-right py-1 px-3">
+        <div class="search-container section-spacer flex justify-between">
+            <input type="text" id="searchInput" class="search-input w-100 py-1 px-3" placeholder="Enter movie title">
+            <button id="searchButton" class="search-button btn">Search</button>
+        </div>
+        
+        <div class="filters-container section-spacer">
+            <div class="flex justify-between">
+                <select id="sortBy" class="w-100 py-1 px-3" name="sortBy">
+                    <option value="popularity.desc" selected>Popularity Descending</option>
+                    <option value="popularity.asc">Popularity Ascending</option>
+                    <option value="vote_average.desc">Average Rating Descending</option>
+                    <option value="vote_average.asc">Average Rating Ascending</option>
+                    <option value="vote_count.desc">Rating Count Descending</option>
+                    <option value="vote_count.asc">Rating Count Ascending</option>
+                </select>
+            </div>
+            
+            <div class="section-spacer">
+                <h3>Select language:</h3>
+                <input type="checkbox" id="lang" name="lang" value="en" />    
+                <label for="lang">English Movies Only</label>
+            </div>
+
+            <h3>Select genres:</h3>
+            <div id="genreContainer"></div>
+
+            <button id="filterButton" class="filter-button btn w-100 mt-4">Filter</button>
+        </div>
+    </div>
+
+    <div class="movies-container"></div>
 </div>
 
-<div class="filters-container">
-    <label for="sortBy">Sort By:</label>
-    <select id="sortBy" name="sortBy">
-        <option value="popularity.desc" selected>Popularity Descending</option>
-        <option value="popularity.asc">Popularity Ascending</option>
-        <option value="vote_average.desc">Average Rating Descending</option>
-        <option value="vote_average.asc">Average Rating Ascending</option>
-        <option value="vote_count.desc">Rating Count Descending</option>
-        <option value="vote_count.asc">Rating Count Ascending</option>
-    </select>
+<style>
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
 
-    <label for="lang">English Movies Only</label>
-    <input type="checkbox" id="lang" name="lang" value="en" />
+    .gallery-content {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: reverse;
+        -ms-flex-direction: row-reverse;
+        flex-direction: row-reverse;
+    }
 
-    <h3>Select genres:</h3>
-    <div id="genreContainer"></div>
+    .movies-container {
+        width: 60%;
+    }
 
-    <button id="filterButton" class="filter-button">Filter</button>
-</div>
+    .w-100 {
+        width: 100%;
+    }
 
-<div class="max-w-5xl mx-auto relative mt-16 content"></div>
+    .btn {
+        background-color: #001048;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border: 2px solid #001048;
+    }
+
+    .btn:hover {
+        background-color: #ffffff;
+        color: #001048;
+    }
+
+    .sidebar-right {
+        width: 40%;
+        border: 2px solid #001048;
+        border-radius: 20px;
+        background-color: #e7f5ff;
+        height: 100%;
+        position: sticky;
+        top: 20px;
+    }
+
+    .genre-checkbox {
+        margin-right: 1rem;
+    }
+
+    .section-spacer {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    h3, 
+    p {
+        font-feature-settings: normal;
+    }
+</style>
 
 <script>
     $(document).ready(function() {
@@ -105,7 +171,7 @@
                                 id: genre.id,
                                 name: 'genres',
                                 value: genre.name
-                            });
+                            }).addClass('genre-checkbox');
 
                             // Checkbox label
                             var label = $('<label>').attr('for', genre.id).text(genre.name);
@@ -128,18 +194,16 @@
 
             // Function to populate movies on the page
             function populateMovies(data) {
-                const moviesContainer = $('.content');
+                const moviesContainer = $('.movies-container');
                 moviesContainer.empty();// Clear the space for new movies
 
                 // Loop through results and create HTML for each movie
                 $.each(data.results, function(index, movie) {
-                    const movieDiv = $('<div>').addClass('movie-card');
-
-                    const movieMetaDiv = $('<div>').addClass('movie-meta');
-
-                    const title = $('<h2>').text(movie.title);
-                    const rating = $('<h3>').text(movie.vote_average);
-                    const img = $('<img>').attr('src', "https://image.tmdb.org/t/p/w500" + movie.poster_path);
+                    const movieDiv = $('<div>').addClass('movie-card flex justify-between mb-2');
+                    const movieMetaDiv = $('<div>').addClass('movie-meta px-3');
+                    const title = $('<h3>').text(movie.title);
+                    const rating = $('<p>').text(movie.vote_average.toFixed(1));
+                    const img = $('<img>').attr('src', "https://image.tmdb.org/t/p/w200" + movie.poster_path);
                     const overview = $('<p>').text(movie.overview);
 
                     movieMetaDiv.append(title, rating, overview);
